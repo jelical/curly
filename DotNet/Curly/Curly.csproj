@@ -33,7 +33,7 @@
   </ItemGroup>
 
   <Target Name="LocalInstall" AfterTargets="Pack">
-    <Exec Command="$(MSBuildProjectDirectory)\..\.nuget\nuget.exe delete -Source C:\LocalArtifactory $(PackageId) $(PackageVersion) -NonInteractive" ContinueOnError="True"></Exec>
-    <Exec Command="$(MSBuildProjectDirectory)\..\.nuget\nuget.exe add -Source C:\LocalArtifactory $(PackageOutputPath)$(PackageId).$(PackageVersion).nupkg"></Exec>
+    <Exec Condition="'$(OS)' == 'Windows_NT'" Command="$(MSBuildProjectDirectory)\..\.nuget\nuget.exe delete -Source C:\LocalArtifactory $(PackageId) $(PackageVersion) -NonInteractive" ContinueOnError="True"></Exec>
+    <Exec Condition="'$(OS)' == 'Windows_NT'" Command="$(MSBuildProjectDirectory)\..\.nuget\nuget.exe add -Source C:\LocalArtifactory $(PackageOutputPath)$(PackageId).$(PackageVersion).nupkg"></Exec>
   </Target>
 </Project>
