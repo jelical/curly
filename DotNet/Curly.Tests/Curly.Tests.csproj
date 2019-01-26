@@ -21,7 +21,7 @@
 
 		<Message Text="Testing $(TargetFileName)" />
 
-		<Exec Command="dotnet test --configuration $(Configuration) --no-build --no-restore --framework $(TargetFramework) --results-directory $(MSBuildThisFileDirectory)\..\..\test\results\$(Configuration)\$(TargetName) --filter &quot;TestCategory != integration &amp; TestCategory != IntegrationTests &amp; TestCategory != sanity &amp; TestCategory != local &amp; TestCategory != skip&quot; $(MSBuildProjectFile)"
+		<Exec Command="dotnet test --configuration $(Configuration) --no-build --no-restore --framework $(TargetFramework) --test-adapter-path:. --logger:nunit --filter &quot;TestCategory != integration &amp; TestCategory != IntegrationTests &amp; TestCategory != sanity &amp; TestCategory != local &amp; TestCategory != skip&quot; $(MSBuildProjectFile)"
 	  		  ContinueOnError="True"
 			  ConsoleToMSBuild="True"
               EchoOff="true"
