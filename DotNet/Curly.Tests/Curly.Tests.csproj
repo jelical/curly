@@ -1,18 +1,34 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFrameworks>netcoreapp2.0;net461</TargetFrameworks>
-    <IsTestProject>true</IsTestProject>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>netcoreapp2.0</TargetFramework>
+		<IsTestProject>true</IsTestProject>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0" />
-    <PackageReference Include="NUnit" Version="3.8.1" />
-    <PackageReference Include="NUnit3TestAdapter" Version="3.8.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0" />
+		<PackageReference Include="NUnit" Version="3.8.1" />
+		<PackageReference Include="NUnit3TestAdapter" Version="3.8.0" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Curly\Curly.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Curly\Curly.csproj" />
+	</ItemGroup>
 
+	<Target Name="NunitTest"
+		AfterTargets="Build"
+		Condition="'$(RunTests)'=='True' And $(TargetPath.EndsWith('Tests.dll'))">
+
+		<Message Text="Testing $(TargetFileName)" />
+
+		<Exec Command="dotnet test --configuration $(Configuration) --no-build --no-restore --framework $(TargetFramework) --results-directory $(MSBuildThisFileDirectory)\..\..\test\results\$(Configuration)\$(TargetName) --filter &quot;TestCategory != integration &amp; TestCategory != IntegrationTests &amp; TestCategory != sanity &amp; TestCategory != local &amp; TestCategory != skip&quot; $(MSBuildProjectFile)"
+	  		  ContinueOnError="True"
+			  ConsoleToMSBuild="True"
+              EchoOff="true"
+			  WorkingDirectory="$(MSBuildProjectDirectory)">
+			<Output TaskParameter="ExitCode" PropertyName="exitCode" />
+		</Exec>
+		<Message Text="Non zero exit code" Condition="$(exitCode) &lt; 0" Importance="high" />
+	</Target>
+	
 </Project>
